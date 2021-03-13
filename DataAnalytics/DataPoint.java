@@ -20,7 +20,7 @@ public class DataPoint
 		this.f1 = f1;
 		this.f2 = f2;
 		this.label = null;
-		this.isTest = false;
+		this.isTest = true;
 	}
 	
 	public DataPoint()
