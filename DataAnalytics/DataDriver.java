@@ -2,6 +2,8 @@ package project;
 
 import java.util.ArrayList;
 import javax.swing.*;
+import java.awt.*;       
+import java.io.*;
 
 public class DataDriver {
 
@@ -31,9 +33,12 @@ public class DataDriver {
 		
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		JFrame j = new JFrame();
+		Container contentPane = j.getContentPane();
 		j.setTitle("The number of accuracy and precision");
 		j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		j.add(new JLabel("Accuracy is: " + p.getAccuracy(test) + "  Precision is: " + p.getPrecision(test)));
+		contentPane.setLayout(new FlowLayout());
+		contentPane.add(new JLabel("Accuracy is: " + p.getAccuracy(test)));
+		contentPane.add(new JLabel("Precision is: " + p.getPrecision(test)));
 		j.pack();
 		j.setVisible(true);
 	}
