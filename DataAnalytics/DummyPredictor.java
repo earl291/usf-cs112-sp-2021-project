@@ -1,7 +1,6 @@
 package project;
 
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.Math;
@@ -17,29 +16,26 @@ public class DummyPredictor extends Predictor
 		try
 		{
 			Scanner v1 = new Scanner(new File(filename));
-			for(int a = 0; a < 10; a++)
+			v1.useLocale(Locale.US);
+			while(v1.hasNext())
 			{
-				d.add(new DataPoint(a, 0, "Green", true));
+				d.add(new DataPoint(v1.nextDouble(), v1.nextDouble(), v1.next(), v1.nextBoolean()));
 			}
 		}
 		catch (FileNotFoundException ex)
 		{
 			System.out.println("File Not Found");
 		}
-		return d;
-	}
-	
-	public void guess(ArrayList<DataPoint> data)
-	{
 		double f1 = 0.0;
 		double f2 = 0.0;
-		for(int a = 0; a < data.size(); a++)
+		for(int a = 0; a < d.size(); a++)
 		{
-			f1 = f1 + data.get(a).getF1();
-			f2 = f2 + data.get(a).getF2();
+			f1 = f1 + d.get(a).getF1();
+			f2 = f2 + d.get(a).getF2();
 		}
-		this.greenAvg = f1 / data.size();
-		this.blueAvg = f2 / data.size();
+		this.greenAvg = f1 / d.size();
+		this.blueAvg = f2 / d.size();
+		return d;
 	}
 	
 	public double getAccuracy(ArrayList<DataPoint> data)
