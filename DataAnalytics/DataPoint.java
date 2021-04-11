@@ -1,6 +1,6 @@
 package project;
 
-public class DataPoint 
+public class DataPoint
 {
 	private double f1;
 	private double f2;
@@ -71,11 +71,6 @@ public class DataPoint
 	
 	public void setLabel(String label)
 	{
-		if(!(label.equals("Green") || label.equals("Blue")))
-		{
-			this.label = null;
-			return;
-		}
 		this.label = label;
 	}
 	
