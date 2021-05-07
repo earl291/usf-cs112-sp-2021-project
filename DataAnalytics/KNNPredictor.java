@@ -30,6 +30,11 @@ public class KNNPredictor extends Predictor
 		return this.k;
 	}
 	
+	public ArrayList<DataPoint> getD()
+	{
+		return this.d;
+	}
+	
 	private List<String> getRecordFromLine(String line)
 	{
 		List<String> values = new ArrayList<String>();
