@@ -3,22 +3,29 @@ package project;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
 
-public class Graph extends JPanel
+public class Graph extends JPanel implements ActionListener
 {
 	private static final long serialVersionUID = 1L;
     private int labelPadding = 40;
@@ -46,6 +53,15 @@ public class Graph extends JPanel
 
     // TODO: Add a private KNNPredictor variable
     private KNNPredictor knn;
+    
+    static final int FPS_MIN = 2;
+    static final int FPS_MAX = 25;
+    static final int FPS_INIT = 5;
+    int knum = 5;
+    JLabel arr;
+    JLabel pre;
+    JSlider sli;
+    
     	
 	/**
 	 * Constructor method
@@ -70,7 +86,10 @@ public class Graph extends JPanel
              }
          }
         this.data = test;
-
+        this.arr = new JLabel("Accuracy is: " + this.knn.getAccuracy(this.knn.getD()) + "%");
+        this.pre = new JLabel("Precision is: " + this.knn.getPrecision(this.knn.getD()) + "%");
+        this.sli = new JSlider(JSlider.HORIZONTAL, FPS_MIN, FPS_MAX, FPS_INIT);
+        
         // TODO: Remove the above logic where random data is generated
         // TODO: instantiate the KNNPredictor variable
         // TODO: Run readData using input filename to split the data to test and training
@@ -80,6 +99,21 @@ public class Graph extends JPanel
     public KNNPredictor getKNN()
     {
     	return this.knn;
+    }
+    
+    public JLabel getArr()
+    {
+    	return this.arr;
+    }
+    
+    public JLabel getPre()
+    {
+    	return this.pre;
+    }
+    
+    public JSlider getSli()
+    {
+    	return this.sli;
     }
 
     @Override
@@ -251,22 +285,45 @@ public class Graph extends JPanel
 	    /* Main panel */
         Graph mainPanel = new Graph(K, fileName);
         JPanel l = new JPanel();
-        JLabel arr = new JLabel("Accuracy is: " + mainPanel.getKNN().getAccuracy(mainPanel.getKNN().getD()) + "%");
-        JLabel pre = new JLabel("Precision is: " + mainPanel.getKNN().getPrecision(mainPanel.getKNN().getD()) + "%");
+        JPanel s = new JPanel();
+        JLabel cho = new JLabel("Choose the majority value", JLabel.CENTER);
+        cho.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JButton run = new JButton("Run Test");
+        run.addActionListener(mainPanel);
+        
         
         // Feel free to change the size of the panel
         mainPanel.setPreferredSize(new Dimension(700, 600));
+        mainPanel.getSli().setMajorTickSpacing(5);
+        mainPanel.getSli().setMinorTickSpacing(1);
+        mainPanel.getSli().setPaintTicks(true);
+        mainPanel.getSli().setSnapToTicks(true);
+        mainPanel.getSli().setPaintLabels(true);
 
         /* creating the frame */
-        JFrame frame = new JFrame("CS 112 Lab Part 3");
+        JFrame frame = new JFrame("CS 112 Lab Part 4");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
-        frame.add(l, BorderLayout.SOUTH);
-        l.add(arr);
-        l.add(pre);
+        frame.add(l, BorderLayout.NORTH);
+        frame.add(s, BorderLayout.SOUTH);
+        l.add(mainPanel.getArr());
+        l.add(mainPanel.getPre());
+        s.add(cho);
+        s.add(mainPanel.getSli());
+        s.add(run);
+        s.setLayout(new BoxLayout(s, BoxLayout.PAGE_AXIS));
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+    
+    public void actionPerformed(ActionEvent e) 
+    {
+    	JSlider j = this.sli;
+    	knum = j.getValue() * 2 + 1;
+    	this.knn.setK(knum);
+    	arr.setText("Accuracy is: " + this.knn.getAccuracy(this.knn.getD()) + "%");
+    	pre.setText("Precision is: " + this.knn.getPrecision(this.knn.getD()) + "%");
     }
       
     /* The main method runs createAndShowGui*/

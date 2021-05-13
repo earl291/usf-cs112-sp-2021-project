@@ -25,6 +25,11 @@ public class KNNPredictor extends Predictor
 		}
 	}
 	
+	public void setK(int n)
+	{
+		this.k = n;	
+	}
+	
 	public int getK()
 	{
 		return this.k;
